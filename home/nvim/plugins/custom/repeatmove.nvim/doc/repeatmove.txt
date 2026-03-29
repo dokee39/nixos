@@ -1,0 +1,198 @@
+*repeatmove.txt*  repeatmove.nvim
+
+Author: you
+License: MIT
+
+==============================================================================
+CONTENTS                                                     *repeatmove-contents*
+
+1. Introduction ............................................. |repeatmove-intro|
+2. Requirements ............................................. |repeatmove-requirements|
+3. Installation ............................................. |repeatmove-installation|
+4. Configuration ............................................ |repeatmove-configuration|
+5. API ...................................................... |repeatmove-api|
+6. Notes .................................................... |repeatmove-notes|
+
+==============================================================================
+INTRODUCTION                                                    *repeatmove-intro*
+
+repeatmove.nvim repeats paired normal-mode motions with alternate keys.
+
+Example:
+
+>lua
+  require('repeatmove').setup({
+    move = {
+      { '[f', ']f' },
+      { '[c', ']c' },
+      { '[d', ']d' },
+    },
+    repeat_keys = {
+      { '[', ']' },
+      { ',', ';' },
+    },
+  })
+<
+
+After any tracked move runs:
+
+- '[' and ';' repeat the backward move
+- ']' and ',' repeat the forward move
+- any other non-count key clears the active repeat state
+- outside active repeat state, repeat keys keep their normal behavior
+
+==============================================================================
+REQUIREMENTS                                         *repeatmove-requirements*
+
+Neovim 0.10 or newer.
+
+==============================================================================
+INSTALLATION                                         *repeatmove-installation*
+
+With lazy.nvim:
+
+>lua
+  {
+    'dokee39/repeatmove.nvim',
+    config = function()
+      require('repeatmove').setup({
+        move = {
+          { '[f', ']f' },
+          { '[c', ']c' },
+          { '[d', ']d' },
+        },
+        repeat_keys = {
+          { '[', ']' },
+          { ',', ';' },
+        },
+      })
+    end,
+  }
+<
+
+==============================================================================
+CONFIGURATION                                       *repeatmove-configuration*
+
+Single move pair:
+
+>lua
+  require('repeatmove').setup({
+    move = { '[f', ']f' },
+    repeat_keys = { ',', ';' },
+  })
+<
+
+Multiple move pairs:
+
+>lua
+  require('repeatmove').setup({
+    move = {
+      { '[f', ']f' },
+      { '[c', ']c' },
+      { '[d', ']d' },
+    },
+    repeat_keys = { ',', ';' },
+  })
+<
+
+Multiple repeat key pairs:
+
+>lua
+  require('repeatmove').setup({
+    move = {
+      { '[f', ']f' },
+      { '[c', ']c' },
+    },
+    repeat_keys = {
+      { '[', ']' },
+      { ',', ';' },
+    },
+  })
+<
+
+Multiple groups:
+
+>lua
+  require('repeatmove').setup({
+    groups = {
+      {
+        move = { { '[f', ']f' }, { '[c', ']c' } },
+        repeat_keys = { { ',', ';' } },
+      },
+      {
+        move = { { '[d', ']d' } },
+        repeat_keys = { { '[', ']' } },
+      },
+    },
+  })
+<
+
+The alias 'repeat' is accepted in place of 'repeat_keys'.
+
+==============================================================================
+API                                                            *repeatmove-api*
+
+setup({opts})                                                  *repeatmove.setup()*
+
+  Configure the plugin.
+
+  Accepted shapes:
+
+>lua
+  {
+    move = { '[f', ']f' },
+    repeat_keys = { ',', ';' },
+  }
+<
+
+>lua
+  {
+    move = {
+      { '[f', ']f' },
+      { '[c', ']c' },
+    },
+    repeat_keys = {
+      { '[', ']' },
+      { ',', ';' },
+    },
+  }
+<
+
+>lua
+  {
+    groups = {
+      {
+        move = { { '[f', ']f' }, { '[c', ']c' } },
+        repeat_keys = { { ',', ';' } },
+      },
+      {
+        move = { { '[d', ']d' } },
+        repeat_keys = { { '[', ']' } },
+      },
+    },
+  }
+<
+
+  The alias 'repeat' is accepted in place of 'repeat_keys'.
+
+clear()                                                        *repeatmove.clear()*
+
+  Clear the active repeat state.
+
+==============================================================================
+NOTES                                                        *repeatmove-notes*
+
+- Only normal mode is supported.
+- Repeat keys are intercepted only after a tracked move has just run.
+- Any non-repeat, non-count key clears the active repeat state.
+- Counts are forwarded.
+- Outside active repeat state, repeat keys fall through to their original
+  mappings or built-in behavior.
+- If '[' or ']' are used as repeat keys, they cannot start a fresh bracket
+  command while repeat state is active.
+- Repeat mappings are installed buffer-locally only while repeat state is
+  active, with |:map-<nowait>| semantics.
+- State is cleared lazily on the next key if you switch buffer or leave
+  normal mode.
+
+vim:tw=78:ts=8:noet:ft=help:norl:
