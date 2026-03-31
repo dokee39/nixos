@@ -1,4 +1,4 @@
-{ pkgs, inputs, userName, ... }:
+{ pkgs, userName, ... }:
 
 {
 
@@ -11,13 +11,8 @@
     ./programs.nix
     ./btop.nix
     ./nvim
-     inputs.ags.homeManagerModules.default
+    ./ags
   ];
-
-  programs.ags = {
-    enable = true;
-    configDir = ./ags;
-  };
 
   home.username = userName;
   home.homeDirectory = "/home/${userName}";
@@ -58,7 +53,7 @@
     source = ./scripts;
     recursive = true;
   };
-  home.sessionPath = [ 
+  home.sessionPath = [
     "$HOME/.scripts"
   ];
 

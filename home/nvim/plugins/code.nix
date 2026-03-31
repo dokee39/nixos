@@ -12,13 +12,13 @@ in
       plugins.flash.enable = true;
       keymaps = [
         {
-          mode = [ "n" "x" "o" ];
+          mode = [ "n" ];
           key = "s";
           action = mkRaw ''function() require("flash").jump() end'';
           options.desc = "Flash";
         }
         {
-          mode = [ "n" "x" "o" ];
+          mode = [ "n" ];
           key = "S";
           action = mkRaw ''function() require("flash").treesitter() end'';
           options.desc = "Flash Treesitter";
@@ -112,6 +112,20 @@ in
       plugins.marks = {
         enable = true;
       };
+      keymaps = [
+        {
+          mode = [ "x" ];
+          key = "s";
+          action = "<Plug>(nvim-surround-visual)";
+          options.desc = "Add a surrounding pair around a visual selection";
+        }
+        {
+          mode = [ "x" ];
+          key = "S";
+          action = "<Plug>(nvim-surround-visual-line)";
+          options.desc = "Add a surrounding pair around a visual selection, on new lines";
+        }
+      ];
     }
     {
       plugins.sleuth.enable = true;

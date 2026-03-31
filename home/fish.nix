@@ -33,7 +33,7 @@
       scst = "systemctl status";
 
       # git
-      gad = "git add .";
+      gad = "git add --all";
       gst = "git status -s";
       gci = "git commit -m";
       gbr = "git branch --all";

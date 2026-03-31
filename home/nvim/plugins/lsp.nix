@@ -38,6 +38,9 @@ in {
           ];
         };
       };
+      ts_ls.enable = true;
+      cssls.enable = true;
+      jsonls.enable = true;
     };
 
     keymaps = [
