@@ -23,6 +23,10 @@
       url = "git+https://codeberg.org/LGFae/awww";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    orchis-kde = {
+      url = "github:vinceliuice/Orchis-kde";
+      flake = false;
+    };
 
     nixvim = {
       url = "github:nix-community/nixvim";
@@ -56,40 +60,37 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, agenix, ... }:
-    let
-      lib = nixpkgs.lib;
-
-      hosts = map (lib.strings.removeSuffix ".nix") (builtins.attrNames (builtins.readDir ./hosts));
-      userName = "dokee";
-
-      mkHost = hostName:
-      let
-        specialArgs = { inherit inputs hostName userName; };
-      in 
-        lib.nixosSystem {
-          inherit specialArgs;
-          modules = [
-            ./system
-            ./hosts/${hostName}.nix
-
-            { networking.hostName = hostName; }
-
-            agenix.nixosModules.default
-
-            home-manager.nixosModules.home-manager {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = specialArgs;
-              home-manager.sharedModules = [
-                agenix.homeManagerModules.default
-              ];
-              home-manager.users.${userName} = import ./home;
-            }
-          ];
-        };
-    in {
-      nixosConfigurations = lib.genAttrs hosts mkHost;
+  outputs = inputs: {
+    templates.default = {
+      path = ./templates;
+      description = "flake.nix for new computers";
+      welcomeText = ''
+        Welcome to NixOS!
+      '';
     };
+    nixosModules.default = { config, ... }: {
+      imports = [
+        ./system
+        ./profile
+        inputs.agenix.nixosModules.default
+        inputs.home-manager.nixosModules.home-manager
+      ];
+
+      config = {
+        _module.args = { inherit inputs; };
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          extraSpecialArgs = {
+            inherit inputs;
+          };
+          sharedModules = [
+            inputs.agenix.homeManagerModules.default
+          ];
+          users.${config.profile.userName} = import ./home;
+        };
+      };
+    };
+  };
 }
 

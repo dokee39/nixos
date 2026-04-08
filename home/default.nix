@@ -1,7 +1,6 @@
-{ pkgs, userName, ... }:
+{ pkgs, osConfig, ... }:
 
 {
-
   imports = [
     ./desktop
     ./git.nix
@@ -10,12 +9,14 @@
     ./env.nix
     ./programs.nix
     ./btop.nix
+    ./codex.nix
+    ./yazi.nix
     ./nvim
     ./ags
   ];
 
-  home.username = userName;
-  home.homeDirectory = "/home/${userName}";
+  home.username = osConfig.profile.userName;
+  home.homeDirectory = "/home/${osConfig.profile.userName}";
 
   programs.ssh = {
     enable = true;
@@ -30,23 +31,26 @@
   };
 
   home.packages = with pkgs;[
-    ranger
-
-    zip
-    xz
-    unzip
     p7zip
+    _7zz-rar
+    unar
 
     ripgrep
     jq
-    eza
     fzf
+    fd
+
+    eza
+    bat
+    hexyl
+    glow
 
     nix-output-monitor
 
-    glow
-
     rmpc
+    ffmpeg
+
+    python3
   ];
 
   home.file.".scripts" = {

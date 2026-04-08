@@ -5,12 +5,12 @@
 
   programs.nixvim = {
     enable = true;
-    imports = [ 
+    _module.args = { inherit inputs; };
+    imports = [
       ./option.nix
       ./keymap.nix
       ./theme.nix
       ./plugins
     ];
-    _module.args = { inherit inputs; };
   };
 }

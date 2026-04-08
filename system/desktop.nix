@@ -1,22 +1,24 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  programs.hyprland.enable = true;
-  programs.hyprland.withUWSM = true;
+  config = lib.mkIf config.profile.desktop.enable {
+    programs.hyprland.enable = true;
+    programs.hyprland.withUWSM = true;
 
-  xdg.portal = {
-    enable = true;
-    xdgOpenUsePortal = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-    ];
-  };
+    xdg.portal = {
+      enable = true;
+      xdgOpenUsePortal = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+      ];
+    };
 
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    wireplumber.enable = true;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
+    };
   };
 }

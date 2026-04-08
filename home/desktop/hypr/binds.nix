@@ -98,20 +98,20 @@
 
     bindel = [
       # volume & brightness
-      ", XF86MonBrightnessUp,   exec, ~/.scripts/brightness-control up"
-      ", XF86MonBrightnessDown, exec, ~/.scripts/brightness-control down"
-      "$mainMod, B,             exec, ~/.scripts/brightness-control down"
-      "$mainMod SHIFT, B,       exec, ~/.scripts/brightness-control up"
+      ", XF86MonBrightnessDown, exec, ~/.scripts/brightd ctl dec all 2"
+      ", XF86MonBrightnessUp,   exec, ~/.scripts/brightd ctl inc all 2"
+      "$mainMod, B,             exec, ~/.scripts/brightd ctl dec all 2"
+      "$mainMod SHIFT, B,       exec, ~/.scripts/brightd ctl inc all 2"
 
-      ", XF86AudioRaiseVolume, exec, ~/.scripts/volume-control up"
-      ", XF86AudioLowerVolume, exec, ~/.scripts/volume-control down"
-      "$mainMod, X,            exec, ~/.scripts/volume-control down"
-      "$mainMod SHIFT, X,      exec, ~/.scripts/volume-control up"
+      ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
+      ", XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 2%+"
+      "$mainMod, X,            exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
+      "$mainMod SHIFT, X,      exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 2%+"
     ];
 
     bindl = [
-      ", XF86AudioMute,   exec, ~/.scripts/volume-control mute"
-      "$mainMod, Z,       exec, bash -c \"[[ $(pulsemixer --get-mute) -eq 0 ]] && rmpc pause\"; bash ~/.scripts/volume-control mute"
+      ", XF86AudioMute,   exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+      "$mainMod, Z,       exec, bash -c 'wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -qv MUTED && rmpc pause; wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'"
       "$mainMod SHIFT, Z, exec, ~/.scripts/rmpc-control togglepause"
     ];
   };

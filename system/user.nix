@@ -1,7 +1,7 @@
-{ pkgs, userName, ... }:
+{ config, pkgs, ... }:
 
 {
-  users.users.${userName} = {
+  users.users.${config.profile.userName} = {
     isNormalUser = true;
     extraGroups = [
       "wheel"
@@ -11,45 +11,13 @@
       "video"
       "uucp"
       "input"
+      "i2c"
     ];
     shell = pkgs.fish;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOzGZRZ7Wysqq+OBEgSi6EGZ2ZXGtFeCHYBfMnKXp8PJ dokee@arch-2025-05-26"
-    ];
+    openssh.authorizedKeys.keys = config.profile.authorizedSshKeys;
   };
 
   programs.fish.enable = true;
-
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
-    };
-  };
-
-  services.fstrim.enable = true;
-  services.smartd = {
-    enable = true;
-    notifications.systembus-notify.enable = true;
-  };
-  services.journald.extraConfig = ''
-    SystemMaxUse=500M
-    MaxRetentionSec=30day
-  '';
-  systemd.tmpfiles.rules = [
-    "q /var/tmp - - - 30d"
-    "e /var/cache - - - 30d"
-  ];
-  systemd.user.tmpfiles.rules = [
-    "e %C - - - 30d"
-  ];
-
-  environment.wordlist.enable = true;
-  environment.wordlist.lists.WORDLIST = [
-    "${pkgs.scowl}/share/dict/words.txt"
-    "${pkgs.scowl}/share/dict/words.variants.txt"
-  ];
 
   environment.systemPackages = with pkgs; [
     git
@@ -58,10 +26,15 @@
     tree
     vim
     scowl
-    lm_sensors
-    gnumake
-    clang-tools
-    gcc
-    bear
   ];
+
+  environment.wordlist.enable = true;
+  environment.etc."codex/config.toml".text = ''
+    [tui]
+    status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit", "weekly-limit"]
+
+    [mcp_servers.github]
+    url = "https://api.githubcopilot.com/mcp"
+    bearer_token_env_var = "GITHUB_PAT_TOKEN"
+  '';
 }

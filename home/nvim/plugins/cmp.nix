@@ -74,8 +74,7 @@ in {
           default = [
             "lsp"
             "snippets"
-            "path_buf"
-            "path_ws"
+            "path"
             "buffer"
             "dictionary"
           ];
@@ -91,27 +90,6 @@ in {
                   end, items)
                 end
                 '';
-            };
-
-            path_buf = {
-              name = "PathBuf";
-              module = "blink.cmp.sources.path";
-              score_offset = 3;
-              opts.get_cwd = mkRaw ''
-                function(ctx)
-                  return vim.fn.expand(("#%d:p:h"):format(ctx.bufnr))
-                end
-              '';
-            };
-            path_ws = {
-              name = "PathWs";
-              module = "blink.cmp.sources.path";
-              score_offset = 2;
-              opts.get_cwd = mkRaw ''
-                function(_)
-                  return vim.fn.getcwd()
-                end
-              '';
             };
 
             dictionary = {

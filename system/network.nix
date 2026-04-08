@@ -1,15 +1,16 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
   networking = {
+    hostName = config.profile.hostName;
     useDHCP = false;
     wireless.iwd = {
       enable = true;
       settings.Settings.AutoConnect = true;
     };
     proxy = {
-      default = "http://localhost:7890";
-      noProxy = "localhost";
+      default = lib.mkDefault "http://localhost:7890";
+      noProxy = lib.mkDefault "localhost";
     };
   };
 
@@ -29,6 +30,14 @@
     publish = {
       enable = true;
       addresses = true;
+    };
+  };
+
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
     };
   };
 }

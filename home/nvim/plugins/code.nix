@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 
-let 
+let
   repeatmove = pkgs.vimUtils.buildVimPlugin {
     name = "repeatmove.nvim";
     src = ./custom/repeatmove.nvim;
@@ -44,7 +44,7 @@ in
       ];
     }
     {
-      plugins.treesitter = { 
+      plugins.treesitter = {
         enable = true;
         highlight.enable = true;
         indent.enable = true;

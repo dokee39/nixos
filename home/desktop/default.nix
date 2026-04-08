@@ -11,11 +11,13 @@
     ./gtk-qt-theme.nix
     ./tofi.nix
     ./awww.nix
+    ./brightd.nix
   ];
 
   home.packages = with pkgs; [
     nautilus
-    brightnessctl
     pulsemixer
+    ddcutil
+    brightnessctl
   ];
 }

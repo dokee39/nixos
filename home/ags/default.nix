@@ -10,6 +10,7 @@ in {
 
     extraPackages = with inputs.ags.packages.${system}; [
       hyprland
+      wireplumber
     ];
   };
 }

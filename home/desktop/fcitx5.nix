@@ -72,7 +72,7 @@
     };
   };
 
-  
+
   xdg.dataFile = {
     "fcitx5/pinyin/dictionaries/moegirl.dict".source =
       "${pkgs.fcitx5-pinyin-moegirl}/share/fcitx5/pinyin/dictionaries/moegirl.dict";

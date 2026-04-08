@@ -1,6 +1,6 @@
 { lib, pkgs, inputs, ... }:
 
-let 
+let
   navbuddy = pkgs.vimUtils.buildVimPlugin {
     name = "nvim-navbuddy";
     src = inputs.navbuddy;
@@ -14,17 +14,21 @@ in {
   lsp = {
     enable = true;
 
+    onAttach = ''
+      if client.name == "ruff" then
+        client.server_capabilities.hoverProvider = false
+      end
+    '';
+
     servers = {
       nixd.enable = true;
       lua_ls = {
         enable = true;
-        config = {
-          settings = { 
-            Lua = { 
-              workspace.checkThirdParty = false;
-              telemetry.enable = false;
-              hint.enable = true;
-            };
+        config.settings = {
+          Lua = {
+            workspace.checkThirdParty = false;
+            telemetry.enable = false;
+            hint.enable = true;
           };
         };
       };
@@ -41,6 +45,21 @@ in {
       ts_ls.enable = true;
       cssls.enable = true;
       jsonls.enable = true;
+      ruff.enable = true;
+      basedpyright = {
+        enable = true;
+        config.settings.basedpyright = {
+          disableOrganizeImports = true;
+          analysis.typeCheckingMode = "basic";
+          analysis.diagnosticSeverityOverrides = {
+            reportUnusedImport = "none";
+            reportUnusedVariable = "none";
+            reportDuplicateImport = "none";
+            reportUndefinedVariable = "none";
+            reportUnboundVariable = "none";
+          };
+        };
+      };
     };
 
     keymaps = [
@@ -53,11 +72,13 @@ in {
 
       {
         key = "K";
+        mode = "n";
         lspBufAction = "hover";
         options.desc = "LSP: hover documentation";
       }
       {
         key = "gD";
+        mode = "n";
         lspBufAction = "declaration";
         options.desc = "LSP: [g]oto [D]eclaration";
       }
@@ -69,6 +90,7 @@ in {
       }
       {
         key = "<leader>rn";
+        mode = "n";
         lspBufAction = "rename";
         options.desc = "LSP: [r]e[n]ame";
       }
@@ -145,9 +167,9 @@ in {
     settings = {
       window = {
         border = "rounded";
-        size = { 
-          height = "80%"; 
-          width = "80%"; 
+        size = {
+          height = "80%";
+          width = "80%";
         };
         sections.mid.size = "32%";
       };

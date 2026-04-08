@@ -6,8 +6,7 @@ let
   mmdbSrc = "${inputs.mmdb}/Country.mmdb";
 in
 {
-  age.secrets."mihomo-subscription-url".file =
-    ../secrets/mihomo-subscription-url.age;
+  age.secrets.mihomo-subscription-url.file = config.profile.mihomo.subscriptionUrlSecretFile;
 
   services.mihomo = {
     enable = true;
@@ -27,15 +26,11 @@ in
     "d /var/lib/mihomo 0700 root root -"
   ];
 
-  systemd.services.mihomo.wantedBy = lib.mkForce [ ];
-
   systemd.services.mihomo-subscription-update = {
     description = "Refresh mihomo config from subscription URL";
 
-    wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
     after = [ "network-online.target" ];
-    before = [ "mihomo.service" ];
 
     path = with pkgs; [
       curl
@@ -51,7 +46,7 @@ in
       User = "root";
       Group = "root";
       UMask = "0077";
-      ExecStopPost = "${pkgs.runtimeShell} -c '${pkgs.systemd}/bin/systemctl --no-block restart mihomo.service || true'";
+      TimeoutStartSec = "2min";
     };
 
     script = ''
@@ -73,6 +68,8 @@ in
       curl --fail --location --silent --show-error \
         --connect-timeout 10 \
         --max-time 60 \
+        --retry 5 \
+        --retry-delay 10 \
         "$url" \
         -o "$tmp" || err "failed to download subscription config"
 
@@ -169,13 +166,17 @@ in
       chown root:root "$tmp" || err "failed to set config ownership"
 
       mv -f "$tmp" "$cfg" || err "failed to replace config"
+
+      ${pkgs.systemd}/bin/systemctl try-restart mihomo.service || true
     '';
   };
 
   systemd.timers.mihomo-subscription-update = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnUnitInactiveSec = "1w";
+      OnBootSec = "45s";
+      OnUnitActiveSec = "1w";
+      RandomizedDelaySec = "2m";
       Persistent = true;
       Unit = "mihomo-subscription-update.service";
     };

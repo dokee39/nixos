@@ -1,51 +1,55 @@
-{ pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
-  fonts = {
-    fontDir.enable = true;
+  config = lib.mkIf config.profile.desktop.enable {
+    fonts = {
+      fontDir.enable = true;
 
-    enableDefaultPackages = true;
-    fontconfig.allowBitmaps = false;
-    fontconfig.useEmbeddedBitmaps = true;
+      enableDefaultPackages = true;
+      fontconfig.allowBitmaps = false;
+      fontconfig.useEmbeddedBitmaps = true;
 
-    packages = 
-      let
-        lxgwBrightGB = pkgs.stdenvNoCC.mkDerivation {
-          pname = "lxgw-bright-gb";
-          version = "main";
-          src = inputs.lxgw-bright;
+      packages =
+        let
+          lxgwBrightGB = pkgs.stdenvNoCC.mkDerivation {
+            pname = "lxgw-bright-gb";
+            version = "main";
+            src = inputs.lxgw-bright;
 
-          dontConfigure = true;
-          dontBuild = true;
+            dontConfigure = true;
+            dontBuild = true;
 
-          installPhase = ''
+            installPhase = ''
             runHook preInstall
 
             install -dm755 "$out/share/fonts/truetype"
 
             find . -type f -iname 'LXGWBright*.ttf' \
-              -exec install -m644 -t "$out/share/fonts/truetype" {} +
+            -exec install -m644 -t "$out/share/fonts/truetype" {} +
 
             runHook postInstall
-          '';
-        };
-      in 
-        with pkgs; [
-          noto-fonts
-          noto-fonts-cjk-sans
-          noto-fonts-cjk-serif
+            '';
+          };
+        in
+          with pkgs; [
+            noto-fonts
+            noto-fonts-cjk-sans
+            noto-fonts-cjk-serif
 
-          inter
-          libertinus
+            inter
+            libertinus
 
-          lxgw-wenkai
-          lxgw-neoxihei
+            lxgw-wenkai
+            lxgw-neoxihei
 
-          maple-mono.NF-CN-unhinted
+            maple-mono.NF-CN-unhinted
 
-          nerd-fonts.symbols-only
+            nerd-fonts.symbols-only
 
-          lxgwBrightGB
-        ];
+            lxgwBrightGB
+
+            ocr-a
+          ];
+    };
   };
 }

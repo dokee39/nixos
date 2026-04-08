@@ -1,6 +1,6 @@
 { lib, pkgs, inputs, ... }:
 
-let 
+let
   faster-jk = pkgs.vimUtils.buildVimPlugin {
     name = "faster-jk.nvim";
     src = ./custom/faster-jk.nvim;
@@ -18,7 +18,7 @@ let
     src = inputs.im-select;
   };
   mkRaw = lib.nixvim.mkRaw;
-in 
+in
   lib.mkMerge [
     {
       extraPlugins = [ pkgs.vimPlugins.vim-lastplace ];
@@ -119,5 +119,32 @@ in
         keep_quiet_on_no_binary = false,
         async_switch_im = true
       })'';
+    }
+    {
+      globals.loaded_netrwPlugin = 1;
+      plugins.yazi = {
+        enable = true;
+        settings.open_for_directories = true;
+      };
+      keymaps = [
+        {
+          mode = [ "n" "v" ];
+          key = "<leader>y";
+          action = "<CMD>Yazi<CR>";
+          options.desc = "[y]azi";
+        }
+        {
+          mode = "n";
+          key = "<leader>Y";
+          action = "<CMD>Yazi cwd<CR>";
+          options.desc = "[Y]azi cwd";
+        }
+        {
+          mode = "n";
+          key = "<A-y>";
+          action = "<CMD>Yazi toggle<CR>";
+          options.desc = "Resume [y]azi";
+        }
+      ];
     }
   ]

@@ -27,6 +27,7 @@ in
             long_message_to_split = true;
             lsp_doc_border = true;
           };
+          lsp.progress.enabled = false;
         };
       };
     }
@@ -244,12 +245,8 @@ in
         enable = true;
         settings = {
           animation = false;
-          auto_hide = 1;
-          focus_on_close = "previous";
           insert_at_end = true;
-          icons = {
-            button = false;
-          };
+          icons.button = false;
         };
       };
       autoCmd = [

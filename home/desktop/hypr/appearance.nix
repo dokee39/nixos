@@ -127,7 +127,7 @@
       "col.splash" = "rgba(232136ff)";
       splash_font_family = "LXGW Bright";
 
-      vrr = 1;
+      vrr = 2;
       mouse_move_enables_dpms = true;
 
       animate_manual_resizes = true;

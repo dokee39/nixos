@@ -34,7 +34,7 @@
     };
   };
 
-  keymaps = 
+  keymaps =
     let
       luaBool = b: if b then "true" else "false";
 
