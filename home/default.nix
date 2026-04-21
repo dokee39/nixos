@@ -1,22 +1,26 @@
-{ pkgs, osConfig, ... }:
+{ pkgs, lib, osConfig, ... }:
 
 {
   imports = [
-    ./desktop
-    ./git.nix
     ./fish.nix
     ./kitty.nix
     ./env.nix
-    ./programs.nix
     ./btop.nix
     ./codex.nix
-    ./yazi.nix
+    ./yazi
     ./nvim
-    ./ags
+  ] ++ lib.optionals osConfig.terra.desktop.enable [
+    ./desktop
   ];
 
-  home.username = osConfig.profile.userName;
-  home.homeDirectory = "/home/${osConfig.profile.userName}";
+  home.stateVersion = "25.11";
+
+  home.username = osConfig.terra.userName;
+  home.homeDirectory = "/home/${osConfig.terra.userName}";
+
+  xdg.enable = true;
+  xdg.localBinInPath = true;
+  home.preferXdgDirectories = true;
 
   programs.ssh = {
     enable = true;
@@ -30,17 +34,21 @@
     };
   };
 
-  home.packages = with pkgs;[
-    p7zip
-    _7zz-rar
-    unar
+  programs.git = {
+    enable = true;
+    settings = {
+      user.name = "dokee";
+      user.email = "dokee.39@gmail.com";
+      init.defaultBranch = "main";
+    };
+  };
 
-    ripgrep
-    jq
+  services.udiskie.enable = true;
+
+  home.packages = with pkgs; [
     fzf
-    fd
-
     eza
+
     bat
     hexyl
     glow
@@ -48,29 +56,7 @@
     nix-output-monitor
 
     rmpc
-    ffmpeg
 
-    python3
+    tldr
   ];
-
-  home.file.".scripts" = {
-    source = ./scripts;
-    recursive = true;
-  };
-  home.sessionPath = [
-    "$HOME/.scripts"
-  ];
-
-  home.sessionVariables = {
-    PAGER = "less";
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-
-    RANGER_LOAD_DEFAULT_RC = "FALSE";
-
-    SCONSFLAGS = "-j8";
-    MAKEFLAGS = "-j";
-  };
-
-  home.stateVersion = "25.11";
 }

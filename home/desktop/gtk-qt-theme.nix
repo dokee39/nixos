@@ -10,8 +10,8 @@
     };
 
     iconTheme = {
-      package = pkgs.adwaita-icon-theme;
-      name = "Adwaita";
+      package = pkgs.papirus-icon-theme;
+      name = "Papirus-Dark";
     };
 
     gtk4 = {
@@ -25,15 +25,22 @@
   dconf.settings."org/gnome/desktop/interface" = {
     color-scheme = "prefer-dark";
     gtk-theme = "Orchis-Dark";
-    icon-theme = "Adwaita";
+    icon-theme = "Papirus-Dark";
   };
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk3";
-
     style.name = "kvantum";
+    platformTheme.name = "kde";
   };
+
+  home.packages = with pkgs.kdePackages; [
+    frameworkintegration
+    breeze-icons
+  ];
+
+  xdg.dataFile."color-schemes/OrchisDark.colors".source =
+    "${inputs.orchis-kde}/color-schemes/OrchisDark.colors";
 
   xdg.configFile = {
     "Kvantum/OrchisDark/OrchisDark.kvconfig".source =
@@ -44,6 +51,14 @@
     "Kvantum/kvantum.kvconfig".text = ''
       [General]
       theme=OrchisDark
+    '';
+
+    "kdeglobals".text = ''
+      [General]
+      ColorScheme=OrchisDark
+
+      [Icons]
+      Theme=Papirus-Dark
     '';
   };
 }

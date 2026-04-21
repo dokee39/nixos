@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
 {
-  config = lib.mkIf config.profile.desktop.enable {
+  config = lib.mkIf config.terra.desktop.enable {
     fonts = {
       fontDir.enable = true;
 

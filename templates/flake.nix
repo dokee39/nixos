@@ -1,10 +1,7 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos = {
-      url = "github:dokee39/nixos";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixos.url = "github:dokee39/nixos";
+    nixpkgs.follows = "nixos/nixpkgs";
   };
 
   outputs = { nixpkgs, nixos, ... }: let
@@ -14,7 +11,7 @@
       modules = [
         ./hosts/${hostName}
         nixos.nixosModules.default
-        { profile.hostName = hostName; }
+        { terra.hostName = hostName; }
       ];
     };
   in {

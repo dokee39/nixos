@@ -3,7 +3,7 @@
 {
   home.packages = [ pkgs.bubblewrap ];
   age.secrets.codex-github-pat = {
-    file = osConfig.profile.codex.githubPatSecretFile;
+    file = osConfig.terra.codex.githubPatSecretFile;
     path = "${config.home.homeDirectory}/.local/share/agenix/codex-github-pat";
   };
   programs.fish.functions.codex = ''
@@ -12,10 +12,11 @@
   '';
   programs.codex = {
     enable = true;
-    custom-instructions = ''
+    context = ''
       Please strictly follow these principles in every task and reflect them in your plan:
           - Actively use the built-in search tool or MCP when needed to research relevant implementations.
           - When comparing implementation methods, code structure, or similar project patterns, prefer using GitHub MCP for reference.
+          - Do not infer missing facts or intended behavior. Verify them with available tools when possible.
           - Define the problem before changing the code. Prioritize fixing the root cause, respect the existing system, restore the original correct structure, and avoid masking issues with local patches, extra branches, or temporary exceptions.
           - Prioritize overall structure and long-term complexity, rather than just minimizing local edits or reducing the diff size.
           - Plan changes with foreseeable future peer features in mind. Prefer shared, extensible structures over one-off top-level designs.
@@ -27,6 +28,7 @@
 
       In every plan:
           - Briefly restate the problem first.
+          - Briefly state what has already been verified with available tools, if applicable.
           - Briefly explain why the proposed approach follows these principles, especially in terms of structural consistency, long-term complexity, and support for foreseeable future extensions.
     '';
   };

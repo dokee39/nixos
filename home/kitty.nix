@@ -27,4 +27,6 @@
       placement_strategy = "top-left";
     };
   };
+
+  xdg.configFile."kitty/kitty.app.png".source = ../assets/rose-pine-kitty-icon.png;
 }

@@ -1,10 +1,10 @@
-{ config, ... }:
+{ ... }:
 
 {
   wayland.windowManager.hyprland.settings = {
     "$mainMod" = "SUPER";
     "$terminal" = "uwsm app -- kitty";
-    "$workspacectl" = "~/.scripts/workspacectl";
+    "$workspacectl" = "workspacectl";
 
     bind = [
       # Switch workspaces with mainMod + [0-9]
@@ -63,8 +63,8 @@
       # main
       "$mainMod, Q,       exec, $terminal"
       "$mainMod SHIFT, Q, exec, [fullscreen] terminal"
-      "$mainMod, C,       exec, ~/.scripts/hyprkill"
-      "$mainMod SHIFT, C, exec, ~/.scripts/hyprkill --force"
+      "$mainMod, C,       exec, hyprkill"
+      "$mainMod SHIFT, C, exec, hyprkill --force"
       "$mainMod, escape,  exec, uwsm stop"
       "$mainMod, E,       exec, [float] uwsm app -- nautilus --new-window"
       "$mainMod, V,       togglefloating,"
@@ -83,10 +83,10 @@
       "$mainMod, W,  exec, pkill -USR1 waybar"
       "$mainMod, I,  exec, hyprpicker -a"
       "$mainMod, Y,  exec, $terminal --class clipse -e clipse"
-      "$mainMod, F1, exec, ~/.scripts/screenshot area"
-      "$mainMod, F2, exec, ~/.scripts/screenshot show"
-      "$mainMod, F3, exec, ~/.scripts/screenshot window"
-      "$mainMod, F4, exec, ~/.scripts/screenshot monitor"
+      "$mainMod, F1, exec, screenshot area"
+      "$mainMod, F2, exec, screenshot show"
+      "$mainMod, F3, exec, screenshot window"
+      "$mainMod, F4, exec, screenshot monitor"
       "$mainMod, F8, exec, $terminal -T rmpc -e rmpc"
     ];
 
@@ -98,10 +98,10 @@
 
     bindel = [
       # volume & brightness
-      ", XF86MonBrightnessDown, exec, ~/.scripts/brightd ctl dec all 2"
-      ", XF86MonBrightnessUp,   exec, ~/.scripts/brightd ctl inc all 2"
-      "$mainMod, B,             exec, ~/.scripts/brightd ctl dec all 2"
-      "$mainMod SHIFT, B,       exec, ~/.scripts/brightd ctl inc all 2"
+      ", XF86MonBrightnessDown, exec, brightd ctl dec all 2"
+      ", XF86MonBrightnessUp,   exec, brightd ctl inc all 2"
+      "$mainMod, B,             exec, brightd ctl dec all 2"
+      "$mainMod SHIFT, B,       exec, brightd ctl inc all 2"
 
       ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
       ", XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 2%+"
@@ -112,7 +112,7 @@
     bindl = [
       ", XF86AudioMute,   exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
       "$mainMod, Z,       exec, bash -c 'wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -qv MUTED && rmpc pause; wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'"
-      "$mainMod SHIFT, Z, exec, ~/.scripts/rmpc-control togglepause"
+      "$mainMod SHIFT, Z, exec, rmpc-control togglepause"
     ];
   };
 }

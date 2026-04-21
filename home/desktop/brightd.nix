@@ -1,21 +1,23 @@
-{ config, lib, pkgs, ... }:
+{ lib, customPackages, osConfig, ... }:
 
 {
+  home.packages = [ customPackages.brightd ];
+
   xdg.configFile."ddcutil/ddcutilrc".text = ''
     [ddcutil]
     options: --syslog NEVER
   '';
-  xdg.configFile."brightd/config.toml".text = ''
-    [HDMI-A-1]
-    device = "external"
-    brightness.min = 0
-    brightness.max = 100
 
-    [DP-3]
-    device = "external"
-    brightness.min = 5
-    brightness.max = 70
-  '';
+  xdg.configFile."brightd/config.toml".text =
+    lib.concatStringsSep "\n\n"
+      (lib.mapAttrsToList
+        (name: m: ''
+          [${name}]
+          device = "${m.brightd.device}"
+          brightness.min = ${toString m.brightd.brightness.min}
+          brightness.max = ${toString m.brightd.brightness.max}
+        '')
+        osConfig.terra.desktop.monitors);
 
   systemd.user.services.brightd = {
     Unit = {
@@ -25,17 +27,10 @@
     };
 
     Service = {
-      ExecStart = "${config.home.homeDirectory}/.scripts/brightd worker";
+      ExecStart = "${lib.getExe customPackages.brightd} worker";
+      ExecReload = "${lib.getExe customPackages.brightd} ctl reload";
       Restart = "on-failure";
       RestartSec = 1;
-      Environment = [
-        "PATH=${lib.makeBinPath [
-          pkgs.python3
-          pkgs.brightnessctl
-          pkgs.ddcutil
-          pkgs.systemd
-        ]}"
-      ];
     };
 
     Install = {
@@ -43,3 +38,5 @@
     };
   };
 }
+
+

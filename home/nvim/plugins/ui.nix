@@ -177,28 +177,23 @@ in
                 color = "DiagnosticWarn",
               },
               {
-                function()
-                  local space_line = vim.fn.search([[\v^ +]], "nwc")
-                  local tab_line = vim.fn.search([[\v^\t+]], "nwc")
-                  local same_line = vim.fn.search([[\v^(\t+ | +\t)]], "nwc")
+                  function()
+                    local space_line = vim.fn.search([[\v^ +]], "nwc")
+                    local tab_line = vim.fn.search([[\v^\t+]], "nwc")
+                    local same_line = vim.fn.search([[\v^(\t+ | +\t)]], "nwc")
 
-                  local lines = {}
+                    local min_line = nil
 
-                  if space_line > 0 and tab_line > 0 then
-                    table.insert(lines, space_line)
-                    table.insert(lines, tab_line)
-                  end
+                    if space_line > 0 and tab_line > 0 then
+                      min_line = math.min(space_line, tab_line)
+                    end
 
-                  if same_line > 0 then
-                    table.insert(lines, same_line)
-                  end
+                    if same_line > 0 then
+                      min_line = min_line and math.min(min_line, same_line) or same_line
+                    end
 
-                  if #lines == 0 then
-                    return ""
-                  end
-
-                  return "MI:" .. math.min(table.unpack(lines))
-                end,
+                    return min_line and ("MI:" .. min_line) or ""
+                  end,
                 color = "DiagnosticError",
               },
             }'';

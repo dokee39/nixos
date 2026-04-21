@@ -5,6 +5,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpak = {
+      url = "github:nixpak/nixpak";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-alien.url = "github:thiagokokada/nix-alien";
 
     agenix = {
       url = "github:ryantm/agenix";
@@ -25,6 +30,14 @@
     };
     orchis-kde = {
       url = "github:vinceliuice/Orchis-kde";
+      flake = false;
+    };
+    mikan = {
+      url = "https://github.com/iota9star/mikan_flutter/releases/latest/download/linux-release.zip";
+      flake = false;
+    };
+    nautilus-image-converter = {
+      url = "git+https://gitlab.gnome.org/coreyberla/nautilus-image-converter.git?ref=master";
       flake = false;
     };
 
@@ -68,10 +81,10 @@
         Welcome to NixOS!
       '';
     };
-    nixosModules.default = { config, ... }: {
+    terraModules.default = { config, ... }: {
       imports = [
         ./system
-        ./profile
+        ./terra.nix
         inputs.agenix.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
       ];
@@ -87,10 +100,9 @@
           sharedModules = [
             inputs.agenix.homeManagerModules.default
           ];
-          users.${config.profile.userName} = import ./home;
+          users.${config.terra.userName} = import ./home;
         };
       };
     };
   };
 }
-

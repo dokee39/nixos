@@ -1,4 +1,4 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
   programs.tofi = {
@@ -34,4 +34,10 @@
       text-cursor = true;
     };
   };
+
+  home.activation.clearTofiCache = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    $DRY_RUN_CMD rm -f \
+      "${config.xdg.cacheHome}/tofi-drun" \
+      "${config.xdg.cacheHome}/tofi-compgen"
+  '';
 }

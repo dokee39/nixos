@@ -29,6 +29,7 @@
       # app-specific tiling/floating
       "tile on, match:class ^(steam|Aseprite)$"
       "float on, match:class ^(qq|QQ|wechat|org.telegram.desktop|sxiv|imv|org.gnome.Loupe|rustdesk|tlpui|lxappearance|qt6ct|org.fcitx.fcitx5-config-qt|org.gnome.Nautilus)$"
+      "match:initial_title ^(wechat)$, match:xwayland 1, match:float 1, opacity 1.0 override 1.0 override 1.0 override, no_blur on, no_shadow on, rounding 0, border_size 0"
 
       # qView / Seahorse (Passwords and Keys)
       "float on, match:class ^(com.interversehq.qView|org.gnome.seahorse.Application)$, float on, size monitor_h monitor_h*0.618"

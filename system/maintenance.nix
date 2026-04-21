@@ -23,4 +23,6 @@
   systemd.user.tmpfiles.rules = [
     "e %C - - - 30d"
   ];
+
+  services.auto-cpufreq.enable = true;
 }
