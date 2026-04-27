@@ -34,6 +34,7 @@ in
   home.packages =
     (with pkgs; [
       ddcutil
+      playerctl
       brightnessctl
       pulsemixer
       hyprpicker

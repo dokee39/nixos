@@ -2,13 +2,14 @@
 
 {
   imports = [
-    ./fish.nix
+    ./shell
     ./kitty.nix
     ./env.nix
     ./btop.nix
     ./codex.nix
     ./yazi
     ./nvim
+    ./dev.nix
   ] ++ lib.optionals osConfig.terra.desktop.enable [
     ./desktop
   ];
@@ -46,10 +47,6 @@
   services.udiskie.enable = true;
 
   home.packages = with pkgs; [
-    fzf
-    eza
-
-    bat
     hexyl
     glow
 

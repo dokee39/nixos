@@ -111,7 +111,7 @@
 
     bindl = [
       ", XF86AudioMute,   exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-      "$mainMod, Z,       exec, bash -c 'wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -qv MUTED && rmpc pause; wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'"
+      "$mainMod, Z,       exec, mute-pause"
       "$mainMod SHIFT, Z, exec, rmpc-control togglepause"
     ];
   };

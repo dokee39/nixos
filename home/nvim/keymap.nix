@@ -16,12 +16,15 @@
       options.desc = "quit";
     }
 
-    # clear search highlights
+    # clear search highlights & stop active snippet
     {
       mode = "n";
       key = "<Esc>";
       action = lib.nixvim.mkRaw ''
         function()
+          if vim.snippet.active() then
+            vim.snippet.stop()
+          end
           vim.cmd.nohlsearch()
           require("lualine").refresh()
         end

@@ -2,7 +2,8 @@
 
 let
   repeatmove = pkgs.vimUtils.buildVimPlugin {
-    name = "repeatmove.nvim";
+    pname = "repeatmove.nvim";
+    version = "unstable";
     src = ./custom/repeatmove.nvim;
   };
   mkRaw = lib.nixvim.mkRaw;

@@ -11,24 +11,73 @@ in {
       enable = true;
       luaConfig.pre = ''
         local function dict_keyword_tail(line, col)
-          local before = line:sub(1, col)
-          local keyword = before:match("([%w_-]+)$") or ""
-          if keyword == "" then
-            return "", ""
-          end
-
+          local keyword = line:sub(1, col):match("([%w_-]+)$") or ""
           local base = keyword:gsub("[_-]+$", "")
-          if base == "" then
-            return keyword, ""
-          end
-
-          local segment = base:match("([^-_]+)$") or base
+          local segment = base:match("([^-_]+)$") or ""
           local tail =
-            segment:match("([A-Z][a-z0-9]+)$") or
-            segment:match("([A-Z]+)$") or
-            segment
+            segment:match("([A-Z][a-z0-9]+)$")
+            or segment:match("([A-Z]+)$")
+            or segment
 
           return keyword, tail
+        end
+
+        local function patch_midword_completion(ctx, items, opts)
+          local keyword, tail = dict_keyword_tail(ctx.line, ctx.cursor[2])
+          if tail == "" then
+            return items
+          end
+
+          local row = ctx.cursor[1] - 1
+          local col = ctx.cursor[2]
+          local start_col = col - #tail
+          local prefix = keyword:sub(1, #keyword - #tail)
+          local right = ctx.line:sub(col + 1):match("^([%w_-]*)") or ""
+
+          for i, item in ipairs(items) do
+            local text = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
+            if text ~= nil and text ~= "" then
+              local starts_with_tail = text:sub(1, #tail) == tail
+
+              if not opts.require_tail_match or starts_with_tail then
+                local end_col = col
+                local consume_right =
+                  right ~= ""
+                  and starts_with_tail
+                  and text:sub(-#right) == right
+
+                if consume_right then
+                  end_col = col + #right
+                end
+
+                item.filterText = prefix .. text
+                item.sortText = item.sortText or string.format("%08d", i)
+
+                local range = {
+                  start = { line = row, character = start_col },
+                  ["end"] = { line = row, character = end_col },
+                }
+
+                if item.textEdit and not opts.force_plain_range then
+                  item.textEdit.newText = text
+                  if item.textEdit.range then
+                    item.textEdit.range = range
+                  else
+                    item.textEdit.insert = vim.deepcopy(range)
+                    item.textEdit.replace = vim.deepcopy(range)
+                  end
+                else
+                  item.textEdit = {
+                    newText = text,
+                    range = range,
+                  }
+                  item.insertText = nil
+                end
+              end
+            end
+          end
+
+          return items
         end
       '';
 
@@ -80,17 +129,27 @@ in {
           ];
 
           providers = {
-            lsp = {
-              fallbacks = [ ];
-              transform_items = mkRaw ''
-                function(_, items)
-                  local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-                  return vim.tbl_filter(function(item)
-                    return item.kind ~= CompletionItemKind.Text
-                  end, items)
-                end
-                '';
-            };
+            lsp.transform_items = mkRaw ''
+              function(ctx, items)
+                local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+                items = vim.tbl_filter(function(item)
+                  return item.kind ~= CompletionItemKind.Text
+                end, items)
+                return patch_midword_completion(ctx, items, {
+                  require_tail_match = true,
+                })
+              end
+            '';
+
+            buffer.transform_items = mkRaw ''
+              function(ctx, items)
+                return patch_midword_completion(ctx, items, {
+                  require_tail_match = true,
+                })
+              end
+            '';
+
+            snippets.score_offset = 0;
 
             dictionary = {
               score_offset = -15;
@@ -100,45 +159,10 @@ in {
               max_items = 10;
               transform_items = mkRaw ''
                 function(ctx, items)
-                  local keyword, tail = dict_keyword_tail(ctx.line, ctx.cursor[2])
-                  if keyword == "" or tail == "" then
-                    return items
-                  end
-
-                  local row = ctx.cursor[1] - 1
-                  local col = ctx.cursor[2]
-                  local start_col = col - #tail
-                  local prefix = keyword:sub(1, #keyword - #tail)
-
-                  local right = ctx.line:sub(col + 1):match("^([%w_-]*)") or ""
-
-                  for i, item in ipairs(items) do
-                    local text = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
-
-                    local end_col = col
-                    local consume_right =
-                      right ~= ""
-                      and #text >= #right
-                      and text:sub(1, #tail) == tail
-                      and text:sub(-#right) == right
-
-                    if consume_right then
-                      end_col = col + #right
-                    end
-
-                    item.filterText = prefix .. text
-                    item.sortText = item.sortText or string.format("%08d", i)
-                    item.textEdit = {
-                      newText = text,
-                      range = {
-                        start = { line = row, character = start_col },
-                        ["end"] = { line = row, character = end_col },
-                      },
-                    }
-                    item.insertText = nil
-                  end
-
-                  return items
+                  return patch_midword_completion(ctx, items, {
+                    require_tail_match = false,
+                    force_plain_range = true,
+                  })
                 end
               '';
 
@@ -158,32 +182,32 @@ in {
         };
       };
     };
-
-    keymaps = [
-      {
-        mode = "n";
-        key = "<A-Tab>";
-        action = mkRaw ''
-          function()
-            if vim.snippet.active({ direction = 1 }) then
-              vim.snippet.jump(1)
-            end
-          end
-        '';
-        options.desc = "blink.cmp: snippet forward";
-      }
-      {
-        mode = "n";
-        key = "<A-S-Tab>";
-        action = mkRaw ''
-          function()
-            if vim.snippet.active({ direction = -1 }) then
-              vim.snippet.jump(-1)
-            end
-          end
-        '';
-        options.desc = "blink.cmp: snippet forward";
-      }
-    ];
   };
+
+  keymaps = [
+    {
+      mode = "n";
+      key = "<A-Tab>";
+      action = mkRaw ''
+        function()
+          if vim.snippet.active({ direction = 1 }) then
+            vim.snippet.jump(1)
+          end
+        end
+      '';
+      options.desc = "blink.cmp: snippet forward";
+    }
+    {
+      mode = "n";
+      key = "<A-S-Tab>";
+      action = mkRaw ''
+        function()
+          if vim.snippet.active({ direction = -1 }) then
+            vim.snippet.jump(-1)
+          end
+        end
+      '';
+      options.desc = "blink.cmp: snippet backward";
+    }
+  ];
 }

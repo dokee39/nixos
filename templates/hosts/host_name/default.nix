@@ -60,8 +60,9 @@
   system.autoUpgrade = {
     enable = false;
     flake = "github:yourname/your-config#${config.terra.hostName}";
+    dates = "Sun *-*-* 04:40:00";
     operation = "boot";
-    dates = "Sun 12:30";
+    flags = [ "--refresh" ];
   };
 
   networking = {

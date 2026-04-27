@@ -2,7 +2,8 @@
 
 let
   navbuddy = pkgs.vimUtils.buildVimPlugin {
-    name = "nvim-navbuddy";
+    pname = "nvim-navbuddy";
+    version = "unstable";
     src = inputs.navbuddy;
     dependencies = with pkgs.vimPlugins; [
       nvim-navic
@@ -145,6 +146,52 @@ in {
       }
     ];
   };
+
+  plugins.rustaceanvim = {
+    enable = true;
+    settings = {
+      tools.float_win_config.border = "rounded";
+      server = {
+        on_attach = mkRaw ''
+          function(_, bufnr)
+            vim.keymap.set("n", "K", function()
+              vim.cmd.RustLsp({ "hover", "actions" })
+            end, { buffer = bufnr, desc = "Rust hover actions" })
+
+            vim.keymap.set("n", "<leader>a", function()
+              vim.cmd.RustLsp("codeAction")
+            end, { buffer = bufnr, desc = "Rust code action" })
+
+            vim.keymap.set("n", "<leader>e", function()
+              vim.cmd.RustLsp("explainError")
+            end, { buffer = bufnr, desc = "Rust explain error" })
+          end
+        '';
+
+        default_settings.rust-analyzer.check.command = "clippy";
+      };
+    };
+  };
+
+  extraConfigLua = ''
+    local group = vim.api.nvim_create_augroup("rust_insert_diagnostics", { clear = true })
+
+    vim.api.nvim_create_autocmd("InsertEnter", {
+      group = group,
+      pattern = "*.rs",
+      callback = function(args)
+        vim.diagnostic.enable(false, { bufnr = args.buf })
+      end,
+    })
+
+    vim.api.nvim_create_autocmd("InsertLeave", {
+      group = group,
+      pattern = "*.rs",
+      callback = function(args)
+        vim.diagnostic.enable(true, { bufnr = args.buf })
+      end,
+    })
+  '';
 
   plugins.nvim-lightbulb = {
     enable = true;

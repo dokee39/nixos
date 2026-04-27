@@ -41,6 +41,11 @@
       flake = false;
     };
 
+    rose-pine-zellij = {
+      url = "github:rose-pine/zellij";
+      flake = false;
+    };
+
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";

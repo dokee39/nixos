@@ -2,19 +2,23 @@
 
 let
   faster-jk = pkgs.vimUtils.buildVimPlugin {
-    name = "faster-jk.nvim";
+    pname = "faster-jk.nvim";
+    version = "unstable";
     src = ./custom/faster-jk.nvim;
   };
   beacon = pkgs.vimUtils.buildVimPlugin {
-    name = "beacon.nvim";
+    pname = "beacon.nvim";
+    version = "unstable";
     src = inputs.beacon;
   };
   search-replace = pkgs.vimUtils.buildVimPlugin {
-    name = "search-replace.nvim";
+    pname = "search-replace.nvim";
+    version = "unstable";
     src = inputs.search-replace;
   };
   im-select = pkgs.vimUtils.buildVimPlugin {
-    name = "im-select.nvim";
+    pname = "im-select.nvim";
+    version = "unstable";
     src = inputs.im-select;
   };
   mkRaw = lib.nixvim.mkRaw;
