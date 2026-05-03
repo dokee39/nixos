@@ -53,11 +53,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1777237887,
-        "narHash": "sha256-u7g6n4eYyIa1vm6rrNJ7jJ7j4KqSyba8nBnOvo79FTk=",
+        "lastModified": 1777578913,
+        "narHash": "sha256-2Hzr8T4oUtw2q0ZYxrgDB8kvy85QawlhpiQDk4eGOHQ=",
         "owner": "aylur",
         "repo": "astal",
-        "rev": "9d0d482371526084da4d829b3449ca6f1a463d78",
+        "rev": "67ddc83e0bdbda6de7f6f15e4fbc5d6b9d2d1b18",
         "type": "github"
       },
       "original": {
@@ -252,11 +252,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1777258755,
-        "narHash": "sha256-EC07KwADRE2LdIk7vEDyAaD3I0ZUq24T9jQF9L0iEPk=",
+        "lastModified": 1777771152,
+        "narHash": "sha256-+J0PGlJpLvo1ukmHM0ksI8PtBDwMCYyh87rbs86F0/c=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "7f8bbc93d63401e41368d6ddc46a4f631610fa90",
+        "rev": "9c9fc9368a6d9e698d03d3780d3b930ebc060334",
         "type": "github"
       },
       "original": {
@@ -313,11 +313,11 @@
     "mmdb": {
       "flake": false,
       "locked": {
-        "lastModified": 1777231167,
-        "narHash": "sha256-iLYH43hj6dM6RNuFyv86SwKNqRK/OxkyrveursSgwvU=",
+        "lastModified": 1777577552,
+        "narHash": "sha256-LlpLxmPAMTWMIPCOL40jf9gTuPx7aYzKQ2Mz3NFYOMU=",
         "owner": "alecthw",
         "repo": "mmdb_china_ip_list",
-        "rev": "13880de2ee8ad3d0101086b8c7c1e7943fe30bc7",
+        "rev": "286f750bd8a685a5eef18c3ca4f966cd08735610",
         "type": "github"
       },
       "original": {
@@ -441,11 +441,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1776877367,
-        "narHash": "sha256-EHq1/OX139R1RvBzOJ0aMRT3xnWyqtHBRUBuO1gFzjI=",
+        "lastModified": 1777578337,
+        "narHash": "sha256-Ad49moKWeXtKBJNy2ebiTQUEgdLyvGmTeykAQ9xM+Z4=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "0726a0ecb6d4e08f6adced58726b95db924cef57",
+        "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
         "type": "github"
       },
       "original": {
@@ -512,7 +512,24 @@
         "nixpkgs": "nixpkgs_2",
         "nixvim": "nixvim",
         "orchis-kde": "orchis-kde",
+        "rose-pine-zellij": "rose-pine-zellij",
         "search-replace": "search-replace"
+      }
+    },
+    "rose-pine-zellij": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1762352818,
+        "narHash": "sha256-eilCRSweo0wk4z6snBWFC67NMVvytfDfJqGWVXg6QRc=",
+        "owner": "rose-pine",
+        "repo": "zellij",
+        "rev": "f4b7c27f9515d964a78e07da8332530a45f060d5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rose-pine",
+        "repo": "zellij",
+        "type": "github"
       }
     },
     "rust-overlay": {

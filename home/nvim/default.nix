@@ -7,6 +7,7 @@
     enable = true;
     _module.args = { inherit inputs; };
     imports = [
+      { nixpkgs.config.allowUnfree = true; }
       ./option.nix
       ./keymap.nix
       ./theme.nix
