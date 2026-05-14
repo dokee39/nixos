@@ -6,9 +6,56 @@
   terra = {
     userName = "user_name";
     authorizedSshKeys = [ ];
-    nix.githubPatSecretFile = ./path/to/secret/file.age;
-    codex.githubPatSecretFile = ./path/to/secret/file.age;
-    mihomo.subscriptionUrlSecretFile = ./path/to/secret/file.age;
+    nix.githubPat_secretFile = ./path/to/secret/file.age;
+    mihomo = {
+      port = 7890;
+      tunDevice = "tun0";
+      subscriptionUrl_secretFile = ./path/to/secret/file.age;
+    };
+
+    ai = {
+      searxng = {
+        enable = true;
+        port = 8888;
+        env_secretFile = ./path/to/secret/file.age;
+      };
+      crawl4ai = {
+        enable = true;
+        port = 11235;
+        shmSize = "2g";
+        mcp-wrapper = {
+          model = "deepseek-v4-flash";
+          apiBase = "https://api.deepseek.com/v1";
+          apiKey_secretFile = ./path/to/secret/file.age;
+        };
+      };
+      jina-reranker = {
+        enable = true;
+        port = 8086;
+        idleTimeout = 300;
+      };
+
+      mongodb.port = 27017;
+      meilisearch= {
+        port = 7700;
+        masterKey_secretFile = ./path/to/secret/file.age;
+      };
+
+      librechat = {
+        enable = true;
+        port = 3080;
+        credentials_secretFile = ./path/to/secret/file.age;
+        meilisearchMasterKey_secretFile = ./path/to/secret/file.age;
+      };
+
+      mcp = {
+        groupName = "mcp";
+        github = {
+          enable = true;
+          pat_secretFile = ./path/to/secret/file.age;
+        };
+      };
+    };
 
     transmission = {
       enable = false;
@@ -20,7 +67,7 @@
         up = 2000;
         down = 10000;
       };
-      rpcSecretFile = ./path/to/secret/file.age;
+      rpc_secretFile = ./path/to/secret/file.age;
     };
 
     desktop = {
@@ -65,7 +112,7 @@
     flags = [ "--refresh" ];
   };
 
-  networking = {
+  networking = { # force
     proxy = {
       default = "http://localhost:7890";
       noProxy = "localhost";

@@ -77,16 +77,13 @@
     jq
     fd
   ] ++ [
-    inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.nix-alien
+    inputs.nix-alien.packages.${config.terra.system}.nix-alien
+    inputs.agenix.packages.${config.terra.system}.default
   ];
 
   environment.wordlist.enable = true;
   environment.etc."codex/config.toml".text = ''
     [tui]
     status_line = ["model-with-reasoning", "context-remaining", "current-dir", "five-hour-limit", "weekly-limit"]
-
-    [mcp_servers.github]
-    url = "https://api.githubcopilot.com/mcp"
-    bearer_token_env_var = "GITHUB_PAT_TOKEN"
   '';
 }

@@ -41,6 +41,7 @@ in
 
       google-chrome
       osu-lazer
+      cherry-studio
     ])
     ++ [
       customPackages.mikan

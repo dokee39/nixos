@@ -1,7 +1,7 @@
-{ pkgs, inputs, ... }:
+{ osConfig, inputs, ... }:
 
 let
-  awww = inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww;
+  awww = inputs.awww.packages.${osConfig.terra.system}.awww;
 in {
   home.packages = [ awww ];
 

@@ -17,11 +17,11 @@
       description = "SSH public keys authorized for the primary user.";
     };
 
-    nix.githubPatSecretFile = lib.mkOption {
+    nix.githubPat_secretFile = lib.mkOption {
       type = lib.types.path;
       description = "Path to a secret file containing the GitHub PAT for nix.";
     };
-    codex.githubPatSecretFile = lib.mkOption {
+    codex.githubPat_secretFile = lib.mkOption {
       type = lib.types.path;
       description = "Path to a secret file containing the GitHub PAT for codex.";
     };
@@ -29,20 +29,20 @@
     system = lib.mkOption {
       type = lib.types.str;
       readOnly = true;
+      internal = true;
+      default = pkgs.stdenv.hostPlatform.system;
     };
     shellPkg = lib.mkOption {
       type = lib.types.package;
       readOnly = true;
+      internal = true;
+      default = config.users.users.${config.terra.userName}.shell or pkgs.bashInteractive;
     };
     shellExe = lib.mkOption {
       type = lib.types.str;
       readOnly = true;
+      internal = true;
+      default = lib.getExe config.terra.shellPkg;
     };
-  };
-
-  config.terra = {
-    system = pkgs.stdenv.hostPlatform.system;
-    shellPkg = config.users.users.${config.terra.userName}.shell or pkgs.bashInteractive;
-    shellExe = lib.getExe config.terra.shellPkg;
   };
 }

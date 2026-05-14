@@ -20,6 +20,8 @@
         set_color --bold blue
         if set -q IN_NIX_SHELL
           printf 'Nix Shell'
+        else if test "$SHLVL" -gt 1; and string match -qr '^/nix/store/' -- $PATH[1]
+          printf 'Nix Shell'
         else
           printf "NixOS"
         end
@@ -33,6 +35,10 @@
           printf "[dev#%s]" $DEVSHELL_NAME
           set_color normal
         else if set -q IN_NIX_SHELL
+          set_color --bold blue
+          printf "[nix shell]"
+          set_color normal
+        else if test "$SHLVL" -gt 1; and string match -qr "^/nix/store/" -- $PATH[1]
           set_color --bold blue
           printf "[nix shell]"
           set_color normal

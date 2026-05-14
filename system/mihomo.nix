@@ -1,18 +1,29 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
+  cfg = config.terra.mihomo;
   mihomoConfigPath = "/var/lib/mihomo/config.yaml";
-  subUrlFile = config.age.secrets."mihomo-subscription-url".path;
+  subUrlFile = config.age.secrets.mihomo-subscription-url.path;
   mmdbSrc = "${inputs.mmdb}/Country.mmdb";
 in
 {
-  options.terra.mihomo.subscriptionUrlSecretFile = lib.mkOption {
-    type = lib.types.path;
-    description = "Path to a secret file containing the Mihomo subscription URL.";
+  options.terra.mihomo = {
+    subscriptionUrl_secretFile = lib.mkOption {
+      type = lib.types.path;
+      description = "Path to a secret file containing the Mihomo subscription URL.";
+    };
+    port = lib.mkOption {
+      type = lib.types.port;
+      default = 7890;
+    };
+    tunDevice = lib.mkOption {
+      type = lib.types.str;
+      default = "tun0";
+    };
   };
 
   config = {
-    age.secrets.mihomo-subscription-url.file = config.terra.mihomo.subscriptionUrlSecretFile;
+    age.secrets.mihomo-subscription-url.file = cfg.subscriptionUrl_secretFile;
 
     services.mihomo = {
       enable = true;
@@ -20,6 +31,8 @@ in
       webui = pkgs.metacubexd;
       configFile = mihomoConfigPath;
     };
+
+    networking.firewall.trustedInterfaces = [ config.terra.mihomo.tunDevice ];
 
     system.activationScripts.mihomo-mmdb = {
       text = ''
@@ -82,7 +95,10 @@ in
         [ -s "$tmp" ] || err "downloaded subscription config is empty"
 
         yq -i '
+          .port = ${toString cfg.port} |
+
           .tun.enable = true |
+          .tun.device = "${cfg.tunDevice}" |
           .tun.stack = "mixed" |
           .tun."auto-route" = true |
           .tun."auto-redirect" = true |

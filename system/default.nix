@@ -12,6 +12,8 @@
     ./ram.nix
     ./steam.nix
     ./transmission.nix
+    ./ai
+    ./virtualisation.nix
   ];
 
   system.stateVersion = "25.11";
@@ -20,8 +22,9 @@
 
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
-    substituters = [
-      "https://cache.nixos.org?priority=10"
+    extra-substituters = [ "https://cache.nixos-cuda.org" ];
+    extra-trusted-public-keys = [
+      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
     ];
     auto-optimise-store = true;
     use-xdg-base-directories = true;
@@ -40,7 +43,7 @@
     device = "nodev";
   };
 
-  age.secrets.nix-github-pat.file = config.terra.nix.githubPatSecretFile;
+  age.secrets.nix-github-pat.file = config.terra.nix.githubPat_secretFile;
   nix.extraOptions = ''
     !include /run/nix/access-tokens.conf
   '';

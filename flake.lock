@@ -186,11 +186,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775087534,
-        "narHash": "sha256-91qqW8lhL7TLwgQWijoGBbiD4t7/q75KTi8NxjVmSmA=",
+        "lastModified": 1777932387,
+        "narHash": "sha256-nUYVPiqrzr36ThiQOAr5MKeGHDBSDM3OFWkz0uDjOvc=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "3107b77cd68437b9a76194f0f7f9c55f2329ca5b",
+        "rev": "71a3a77326609675e9f8b51084cf23d5d1945899",
         "type": "github"
       },
       "original": {
@@ -252,11 +252,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1777771152,
-        "narHash": "sha256-+J0PGlJpLvo1ukmHM0ksI8PtBDwMCYyh87rbs86F0/c=",
+        "lastModified": 1778365864,
+        "narHash": "sha256-ImoT/wqmgMImf2dAC+E0MverAdA4QXsedOeES9B7Ezw=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "9c9fc9368a6d9e698d03d3780d3b930ebc060334",
+        "rev": "2f419037039a152448c5f4ae9494154753d1b399",
         "type": "github"
       },
       "original": {
@@ -279,6 +279,22 @@
         "owner": "keaising",
         "repo": "im-select.nvim",
         "type": "github"
+      }
+    },
+    "jina-reranker-v3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1774619660,
+        "narHash": "sha256-VIO35EGEIcoEPbx/DGWzsw2/+P5jnd2yE5fapoWxE+Q=",
+        "ref": "refs/heads/main",
+        "rev": "10fb694fc21f7a710a563ff1eb977a460f3868e4",
+        "revCount": 23,
+        "type": "git",
+        "url": "https://huggingface.co/jinaai/jina-reranker-v3"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://huggingface.co/jinaai/jina-reranker-v3"
       }
     },
     "lxgw-bright": {
@@ -313,11 +329,11 @@
     "mmdb": {
       "flake": false,
       "locked": {
-        "lastModified": 1777577552,
-        "narHash": "sha256-LlpLxmPAMTWMIPCOL40jf9gTuPx7aYzKQ2Mz3NFYOMU=",
+        "lastModified": 1778182386,
+        "narHash": "sha256-O08HKXJiT+MzARe68160eUPC6glrIaqSOSepuptnQf4=",
         "owner": "alecthw",
         "repo": "mmdb_china_ip_list",
-        "rev": "286f750bd8a685a5eef18c3ca4f966cd08735610",
+        "rev": "e6ef691622ae20983feb3cc7d9f32511ab32ee05",
         "type": "github"
       },
       "original": {
@@ -441,11 +457,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1777578337,
-        "narHash": "sha256-Ad49moKWeXtKBJNy2ebiTQUEgdLyvGmTeykAQ9xM+Z4=",
+        "lastModified": 1777954456,
+        "narHash": "sha256-hGdgeU2Nk87RAuZyYjyDjFL6LK7dAZN5RE9+hrDTkDU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+        "rev": "549bd84d6279f9852cae6225e372cc67fb91a4c1",
         "type": "github"
       },
       "original": {
@@ -464,11 +480,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1777236345,
-        "narHash": "sha256-ALOqlq7bE30lsX4rA76hXeQ2aLLEpb44hS+D1+jWS88=",
+        "lastModified": 1777991353,
+        "narHash": "sha256-DFwjggMV+nzCZpwK6Obxj9F+P59rbLVowGqHETfctBk=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "a67d9cd6ff725a763afe88727aac73208ded3bf4",
+        "rev": "7986a276960b4dfaed9bb2c3c438b5ba71ae08f1",
         "type": "github"
       },
       "original": {
@@ -502,6 +518,7 @@
         "beacon": "beacon",
         "home-manager": "home-manager_2",
         "im-select": "im-select",
+        "jina-reranker-v3": "jina-reranker-v3",
         "lxgw-bright": "lxgw-bright",
         "mikan": "mikan",
         "mmdb": "mmdb",

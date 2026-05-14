@@ -76,6 +76,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.astal.follows = "astal";
     };
+
+    jina-reranker-v3 = {
+      url = "https://huggingface.co/jinaai/jina-reranker-v3";
+      type = "git";
+      flake = false;
+    };
   };
 
   outputs = inputs: {
